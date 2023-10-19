@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
-  get '/', to: 'home#index'
+  root to: 'home#index'
+  resources :warehouses, only: [:show]
+
   get "up" => "rails/health#show", as: :rails_health_check
 end
