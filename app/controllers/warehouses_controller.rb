@@ -10,9 +10,9 @@ class WarehousesController < ApplicationController
   def create
     warehouse_params = params.require(:warehouse).permit(:name, :code, :city, :description, :address, :cep, :area)
 
-    warehouse = Warehouse.new(warehouse_params)
+    @warehouse = Warehouse.new(warehouse_params)
 
-    if warehouse.save
+    if @warehouse.save
       redirect_to root_path, notice: 'Galpão cadastrado com sucesso!'
     else
       flash.now[:notice] = 'Galpão não cadastrado.'
