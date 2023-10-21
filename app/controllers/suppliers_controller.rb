@@ -1,5 +1,5 @@
 class SuppliersController < ApplicationController
-  before_action :set_supplier, only: [:show]
+  before_action :set_supplier, only: [:show, :edit, :update]
 
   def index
     @suppliers = Supplier.all
@@ -19,6 +19,17 @@ class SuppliersController < ApplicationController
     else
       flash.now[:alert] = 'Fornecedor não cadastrado.'
       render :new
+    end
+  end
+
+  def edit; end
+
+  def update
+    if @supplier.update(supplier_params)
+      redirect_to @supplier, notice: 'Fornecedor atualizado com sucesso!'
+    else
+      flash.now[:alert] = 'Não foi possível atualizar o fornecedor.'
+      render :edit
     end
   end
 
