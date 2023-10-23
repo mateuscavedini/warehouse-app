@@ -2,9 +2,11 @@ require 'rails_helper'
 
 describe 'Usuário vê detalhes de um modelo de produto' do
   it 'a partir da tela inicial' do
+    user = User.create!(name: 'Mateus', email: 'mateus@email.com', password: 'password')
     supplier = Supplier.create!(brand_name: 'Samsung', corporate_name: 'Samsung Eletronicos LTDA', registration_number: '07317108000151', full_address: 'Av Nações Unidas, 1000', city: 'São Paulo', state: 'SP', email: 'sac@samsung.com.br')
     ProductModel.create!(name: 'TV 32', weight: 8000, width: 70, height: 45, depth: 10, sku: 'TV32-SAMSU-XPTO90', supplier: supplier)
 
+    login_as(user)
     visit root_path
     click_on 'Modelos de Produtos'
     click_on 'TV 32'
@@ -17,9 +19,11 @@ describe 'Usuário vê detalhes de um modelo de produto' do
   end
 
   it 'e volta para a tela inicial' do
+    user = User.create!(name: 'Mateus', email: 'mateus@email.com', password: 'password')
     supplier = Supplier.create!(brand_name: 'Samsung', corporate_name: 'Samsung Eletronicos LTDA', registration_number: '07317108000151', full_address: 'Av Nações Unidas, 1000', city: 'São Paulo', state: 'SP', email: 'sac@samsung.com.br')
     ProductModel.create!(name: 'TV 32', weight: 8000, width: 70, height: 45, depth: 10, sku: 'TV32-SAMSU-XPTO90', supplier: supplier)
 
+    login_as(user)
     visit root_path
     click_on 'Modelos de Produtos'
     click_on 'TV 32'
