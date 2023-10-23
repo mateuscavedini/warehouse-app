@@ -46,4 +46,14 @@ RSpec.describe Supplier, type: :model do
       end
     end
   end
+
+  describe '#description' do
+    it 'exibe razão social e cnpj' do
+      supplier = Supplier.new(corporate_name: 'ACME LTDA', registration_number: '47176140000189')
+  
+      result = supplier.description
+  
+      expect(result).to eq 'ACME LTDA - 47176140000189'
+    end
+  end
 end

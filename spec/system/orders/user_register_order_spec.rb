@@ -18,15 +18,15 @@ describe 'Usuário cadastra um pedido' do
     visit root_path
     login_as(user)
     click_on 'Registrar Pedido'
-    select warehouse.name, from: 'Galpão Destino'
-    select supplier.corporate_name, from: 'Fornecedor'
+    select 'GRU - Aeroporto SP', from: 'Galpão Destino'
+    select 'ACME LTDA - 47176140000189', from: 'Fornecedor'
     fill_in 'Data Prevista de Entrega', with: '20/12/2023'
     click_on 'Gravar'
 
     expect(page).to have_content 'Pedido registrado com sucesso!'
-    expect(page).to have_content 'Galpão Destino: Aeroporto SP'
-    expect(page).to have_content 'Fornecedor: ACME LTDA'
-    expect(page).to have_content 'Usuário Responsável: Sergio | sergio@email.com'
+    expect(page).to have_content 'Galpão Destino: GRU - Aeroporto SP'
+    expect(page).to have_content 'Fornecedor: ACME LTDA - 47176140000189'
+    expect(page).to have_content 'Usuário Responsável: Sergio - sergio@email.com'
     expect(page).to have_content 'Data Prevista de Entrega: 20/12/2023'
     expect(page).not_to have_content 'Maceio'
     expect(page).not_to have_content 'Spark Industries Brasil LTDA'
