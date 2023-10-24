@@ -33,4 +33,21 @@ describe 'Usuário cadastra um pedido' do
     expect(page).not_to have_content 'Maceio'
     expect(page).not_to have_content 'Spark Industries Brasil LTDA'
   end
+
+  it 'com data passada' do
+    user = User.create!(name: 'Sergio', email: 'sergio@email.com', password: '123456')
+    warehouse = Warehouse.create!(name: 'Aeroporto SP', code: 'GRU', city: 'Guarulhos', area: 100_000, address: 'Avenida do Aeroporto, 1000', cep: '15000-000', description: 'Galpão destinado para cargas internacionais')
+    supplier = Supplier.create!(corporate_name: 'ACME LTDA', brand_name: 'ACME', registration_number: '47176140000189', full_address: 'Av das Palmas, 100', city: 'Bauru', state: 'SP', email: 'contato@acme.com')
+
+    visit root_path
+    login_as(user)
+    click_on 'Registrar Pedido'
+    select 'GRU - Aeroporto SP', from: 'Galpão Destino'
+    select 'ACME LTDA - 47176140000189', from: 'Fornecedor'
+    fill_in 'Data Prevista de Entrega', with: '20/12/2022'
+    click_on 'Gravar'
+
+    expect(page).to have_content 'Pedido não registrado.'
+    expect(page).to have_content 'Data Prevista de Entrega deve ser futura.'
+  end
 end

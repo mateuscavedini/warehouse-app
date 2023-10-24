@@ -12,12 +12,37 @@ RSpec.describe Order, type: :model do
     end
 
     it 'deve ter uma data prevista de entrega' do
-      user = User.create!(name: 'Sergio', email: 'sergio@email.com', password: '123456')
-      warehouse = Warehouse.create!(name: 'Aeroporto SP', code: 'GRU', city: 'Guarulhos', area: 100_000, address: 'Avenida do Aeroporto, 1000', cep: '15000-000', description: 'Galpão destinado para cargas internacionais')
-      supplier = Supplier.create!(corporate_name: 'ACME LTDA', brand_name: 'ACME', registration_number: '47176140000189', full_address: 'Av das Palmas, 100', city: 'Bauru', state: 'SP', email: 'contato@acme.com')
-      order = Order.new(user: user, warehouse: warehouse, supplier: supplier, estimated_delivery_date: '')
+      order = Order.new(estimated_delivery_date: '')
 
-      expect(order).not_to be_valid
+      order.valid?
+
+      expect(order.errors.include? :estimated_delivery_date).to be true
+    end
+
+    it 'data prevista de entrega não deve ser passada' do
+      order = Order.new(estimated_delivery_date: 1.day.ago)
+
+      order.valid?
+
+      expect(order.errors.include? :estimated_delivery_date).to be true
+      expect(order.errors[:estimated_delivery_date]).to include 'deve ser futura.'
+    end
+
+    it 'data prevista de entrega não deve ser hoje' do
+      order = Order.new(estimated_delivery_date: Date.current)
+
+      order.valid?
+
+      expect(order.errors.include? :estimated_delivery_date).to be true
+      expect(order.errors[:estimated_delivery_date]).to include 'deve ser futura.'
+    end
+
+    it 'data prevista de entrega deve ser igual ou maior que amanhã' do
+      order = Order.new(estimated_delivery_date: 1.day.from_now)
+
+      order.valid?
+
+      expect(order.errors.include? :estimated_delivery_date).to be false
     end
   end
 
