@@ -14,6 +14,7 @@ describe 'Usuário cadastra um pedido' do
     warehouse = Warehouse.create!(name: 'Aeroporto SP', code: 'GRU', city: 'Guarulhos', area: 100_000, address: 'Avenida do Aeroporto, 1000', cep: '15000-000', description: 'Galpão destinado para cargas internacionais')
     Supplier.create!(corporate_name: 'Spark Industries Brasil LTDA', brand_name: 'Spark', registration_number: '36216140000158', full_address: 'Torre da Indústria, 1', city: 'Teresina', state: 'PI', email: 'vendas@spark.com')
     supplier = Supplier.create!(corporate_name: 'ACME LTDA', brand_name: 'ACME', registration_number: '47176140000189', full_address: 'Av das Palmas, 100', city: 'Bauru', state: 'SP', email: 'contato@acme.com')
+    allow(SecureRandom).to receive(:alphanumeric).with(8).and_return('ABC12345')
 
     visit root_path
     login_as(user)
@@ -24,6 +25,7 @@ describe 'Usuário cadastra um pedido' do
     click_on 'Gravar'
 
     expect(page).to have_content 'Pedido registrado com sucesso!'
+    expect(page).to have_content 'Pedido ABC12345'
     expect(page).to have_content 'Galpão Destino: GRU - Aeroporto SP'
     expect(page).to have_content 'Fornecedor: ACME LTDA - 47176140000189'
     expect(page).to have_content 'Usuário Responsável: Sergio - sergio@email.com'
