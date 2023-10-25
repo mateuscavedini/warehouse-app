@@ -1,5 +1,8 @@
 pt-BR:
-  hello: 'Olá mundo'
+  hello: Olá mundo
   found:
-    one: 'encontrado'
-    other: 'encontrados'
+    one: encontrado
+    other: encontrados
+  pending: Pendente
+  delivered: Entregue
+  canceled: Cancelado
