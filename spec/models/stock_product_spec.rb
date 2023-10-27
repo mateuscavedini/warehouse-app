@@ -29,4 +29,31 @@ RSpec.describe StockProduct, type: :model do
       expect(stock_product.serial_number).to eq original_serial_number
     end
   end
+
+  describe '#available?' do
+    it 'true se não tiver destino' do
+      user = User.create!(name: 'Sergio', email: 'sergio@email.com', password: '123456')
+      warehouse = Warehouse.create!(name: 'Aeroporto SP', code: 'GRU', city: 'Guarulhos', area: 100_000, address: 'Avenida do Aeroporto, 1000', cep: '15000-000', description: 'Galpão destinado para cargas internacionais')
+      supplier = Supplier.create!(corporate_name: 'ACME LTDA', brand_name: 'ACME', registration_number: '47176140000189', full_address: 'Av das Palmas, 100', city: 'Bauru', state: 'SP', email: 'contato@acme.com')
+      product = ProductModel.create!(supplier: supplier, name: 'Cadeira Games', weight: 5, height: 100, width: 70, depth: 75, sku: 'CAD-GAMER-1234')
+      order = Order.create!(user: user, warehouse: warehouse, supplier: supplier, estimated_delivery_date: 1.week.from_now, status: :delivered)
+
+      stock_product = StockProduct.create!(order: order, warehouse: warehouse, product_model: product)
+
+      expect(stock_product).to be_available
+    end
+
+    it 'false se tiver destino' do
+      user = User.create!(name: 'Sergio', email: 'sergio@email.com', password: '123456')
+      warehouse = Warehouse.create!(name: 'Aeroporto SP', code: 'GRU', city: 'Guarulhos', area: 100_000, address: 'Avenida do Aeroporto, 1000', cep: '15000-000', description: 'Galpão destinado para cargas internacionais')
+      supplier = Supplier.create!(corporate_name: 'ACME LTDA', brand_name: 'ACME', registration_number: '47176140000189', full_address: 'Av das Palmas, 100', city: 'Bauru', state: 'SP', email: 'contato@acme.com')
+      product = ProductModel.create!(supplier: supplier, name: 'Cadeira Games', weight: 5, height: 100, width: 70, depth: 75, sku: 'CAD-GAMER-1234')
+      order = Order.create!(user: user, warehouse: warehouse, supplier: supplier, estimated_delivery_date: 1.week.from_now, status: :delivered)
+
+      stock_product = StockProduct.create!(order: order, warehouse: warehouse, product_model: product)
+      stock_product.create_stock_product_destination(recipient: 'João', address: 'Rua do João')
+
+      expect(stock_product).not_to be_available
+    end
+  end
 end
